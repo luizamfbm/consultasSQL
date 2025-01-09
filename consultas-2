@@ -1,0 +1,34 @@
+#utilizando a tabela tb_products filtre todos os produtos da categoria perfumaria que tenham peso maior que 100
+
+select
+*
+FROM tb_products
+
+where product_category_name='perfumaria' and product_weight_g>100
+
+
+#utilizando a tabela  tb order item filtre todos os pedidos com preço maior que 50 e frete menor que 15. 
+
+select
+*
+FROM tb_order_items
+
+WHERE price>50 and freight_value <15
+
+
+#utilizando a tabela tb_customers, filtreo todos os clientes de SP e RJ 
+
+select
+*
+FROM tb_customers
+
+WHERE customer_state = 'SP' or customer_state='RJ'
+
+
+#ultilizando a tabela tb_order_reviews, filtre todos os pedidos que tiveram um review score de 4 ou 5. 
+
+select
+*
+FROM tb_order_reviews 
+
+WHERE review_score = 4 or review_score = 5
