@@ -1,0 +1,77 @@
+#utilizando a tabela tb_order_payments, verifique qual é o valor min e max pago em cada tipo de pagamento. 
+
+SELECT 
+    payment_type,
+    min(payment_value) as valorminimo, 
+    max(payment_value) as valormaximo
+
+FROM tb_order_payments
+
+group by payment_type
+
+
+#utilizando a tabela tb products, ordene todas as categorias em ordem alfabetica 
+
+SELECT 
+    DISTINCT(product_category_name) as categoriasdisitntas
+FROM tb_products
+where product_category_name is not NULL
+
+order by product_category_name ASC
+
+
+#ainda utilizando a tabela tb products selecione todos os produtos da categoria perfumaria e ordene do maior peso para o menor 
+
+SELECT 
+    product_id,
+    product_category_name, 
+    product_weight_g
+FROM tb_products
+where product_category_name='perfumaria'
+
+order by product_weight_g DESC
+
+
+#ainda utilizando a tabela tb products liste as 5 categorias com a maior quantidade de produtos
+
+SELECT 
+   product_category_name,
+   count(DISTINCT (product_id)) as qtdprodutos
+FROM tb_products
+WHERE product_category_name is not null
+group by product_category_name
+order by qtdprodutos desc
+limit 5 
+
+
+#Quantos produtos temos da categoria 'artes'?
+
+SELECT
+    count(DISTINCT(product_id)) as qntd
+from tb_products
+
+where product_category_name='artes'
+
+
+#Quantos produtos têm mais de 5 litros?
+
+SELECT
+    product_id,
+    (product_length_cm*product_weight_g*product_width_cm)/1000 as valuelitros
+from tb_products
+where product_length_cm*product_weight_g*product_width_cm/1000 >=5
+
+
+#Quantos produtos de 'beleza _saude' com menos de 1 litro?
+
+SELECT
+    product_id,
+    product_category_name,
+    (product_length_cm * product_weight_g * product_width_cm) / 1000 AS valuelitros
+FROM tb_products
+WHERE product_length_cm * product_weight_g * product_width_cm / 1000 <= 1 
+  AND product_category_name = 'beleza_saude'
+
+
+
+
