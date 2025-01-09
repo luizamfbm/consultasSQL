@@ -1,0 +1,59 @@
+with sellers as (
+    SELECT
+        t1.seller_id, 
+        t2.product_category_name,
+        sum(t1.price) +  sum(t1.freight_value) as valor_total
+    FROM tb_order_items as t1
+
+    left join tb_products as t2
+    on t1.product_id = t2.product_id
+
+    GROUP by 1, 2
+),
+
+tratamento as(
+select
+    seller_id,
+    case when product_category_name like '%alimentos%' then sum(valor_total) end as alimentos,
+    case when product_category_name like '%construcao%' then sum(valor_total) end as construcao,
+    case when product_category_name like '%eletrodomesticos%' then sum(valor_total) end as eletrodomesticos,
+    case when product_category_name like '%fashion%' then sum(valor_total) end as fashion,
+    case when product_category_name like '%livros%' then sum(valor_total) end as livros,
+    case when product_category_name like '%moveis%' then sum(valor_total) end as moveis,
+    case when product_category_name like '%telefonia%' then sum(valor_total) end as telefonia,
+    case when product_category_name not like '%alimentos%'
+        and product_category_name not like '%construcao%'
+        and product_category_name not like '%eletrodomesticos%'
+        and product_category_name not like '%fashion%'
+        and product_category_name not like '%livros%'
+        and product_category_name not like '%moveis%'
+        and product_category_name not like '%telefonia%'
+    then sum(valor_total) 
+    end as outros
+from sellers
+group by seller_id, product_category_name
+), 
+
+valor_total as (
+    SELECT
+    seller_id, 
+    sum(valor_total) as valor_total 
+from sellers
+GROUP by 1 
+) 
+
+SELECT
+    t1.seller_id, 
+    coalesce ((sum(t1.alimentos)/t2.valor_total )*100,0) as alimentos,
+    coalesce ((sum(t1.construcao)/t2.valor_total)*100,0)  as construcao,
+    coalesce ((sum(t1.eletrodomesticos)/t2.valor_total)*100,0)  as eletrodomesticos,
+    coalesce ((sum(t1.fashion)/t2.valor_total)*100,0)  as fashion,
+    coalesce ((sum(t1.livros)/t2.valor_total)*100,0)  as livros,
+    coalesce ((sum(t1.moveis)/t2.valor_total)*100,0)  as moveis,
+    coalesce ((sum(t1.telefonia)/t2.valor_total)*100,0)  as telefonia,
+    coalesce ((sum(t1.outros)/t2.valor_total)*100,0)  as outros
+from tratamento as t1
+left join valor_total as t2
+on t1.seller_id = t2.seller_id
+group by 1 
+
