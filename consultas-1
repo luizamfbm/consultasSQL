@@ -1,0 +1,38 @@
+#utilizando a tabela tb_orders, filtre todos os pedidos que foram entregues
+
+select
+*
+from tb_products
+
+WHERE product_photos_qty = 1 
+
+
+#utilizando a tabela tb_orders, filtre todos os pedidos que foram entregues
+
+select
+*
+from tb_orders
+
+WHERE order_status = 'delivered'
+
+
+
+#utilizando a tabela tb_customers, filtre todos os clientes que são de SP
+
+select
+*
+from tb_customers
+
+WHERE customer_state='SP'
+
+
+
+#utilizando a tabela tb_order_payments, filtre todos os pagamentos por cartão de crédito. 
+
+select
+*
+FROM tb_order_payments
+
+where payment_type = 'credit_card'
+
+
