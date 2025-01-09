@@ -1,0 +1,51 @@
+WITH sellers AS (
+    SELECT
+        seller_id, 
+        order_id,
+        SUM(price * freight_value) AS valor_total
+    FROM tb_order_items
+    GROUP BY seller_id, order_id
+), 
+
+tipo_pagamento AS (
+    SELECT 
+        order_id, 
+        payment_type, 
+        SUM(payment_value) AS valor_pago
+    FROM tb_order_payments
+    GROUP BY order_id, payment_type 
+),
+
+cruzamento AS (
+    SELECT
+        t1.seller_id, 
+        t1.valor_total,
+        t2.payment_type
+    FROM sellers AS t1
+    LEFT JOIN tipo_pagamento AS t2
+    ON t1.order_id = t2.order_id
+),
+
+tratamento AS (
+    SELECT
+        seller_id,
+        SUM(valor_total) AS valor_total,
+        SUM(CASE WHEN payment_type = 'credit_card' THEN valor_total ELSE 0 END) AS cartao_credito, 
+        SUM(CASE WHEN payment_type = 'boleto' THEN valor_total ELSE 0 END) AS boleto, 
+        SUM(CASE WHEN payment_type = 'voucher' THEN valor_total ELSE 0 END) AS voucher, 
+        SUM(CASE WHEN payment_type = 'debit_card' THEN valor_total ELSE 0 END) AS cartao_debito
+    FROM cruzamento
+    GROUP BY seller_id
+)
+
+SELECT
+    seller_id, 
+    SUM(valor_total) AS valor_total,
+    SUM(cartao_credito) / SUM(valor_total) AS cartao_credito, 
+    SUM(boleto) / SUM(valor_total) AS boleto, 
+    SUM(voucher) / SUM(valor_total) AS voucher,
+    SUM(cartao_debito) / SUM(valor_total) AS cartao_debito 
+FROM tratamento
+GROUP BY seller_id;
+
+GROUP by 1
