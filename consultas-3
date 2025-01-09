@@ -1,0 +1,52 @@
+#utilizando a tabela tb_products filtre todos os produtos de perfumaria e artes que tenham um peso maior ou igual a 600. 
+
+select
+*
+FROM tb_products
+
+where (product_category_name= 'perfumaria' or product_category_name = 'artes') and product_weight_g >=600
+
+
+#utilizando a tabela tb customers, filtre todos os clientes de SP e RJ 
+
+select
+*
+FROM tb_customers
+
+where customer_state in ('SP', 'RJ')
+
+
+#utilizando a tabela tb order reviews, filtre todas as reviews com score de 3,4 e 5. 
+
+select
+*
+FROM tb_order_reviews
+
+where review_score in (3,4,5)
+
+
+#utilizando a tabela tb order reviews filtre as reviews que começam com parabéns e depois filtre todos que contém a palavra parabéns. 
+
+select
+*
+FROM tb_order_reviews
+
+where review_comment_message like 'Parabéns...%'
+
+
+#utilizando a tabela tb_order_reviews, conte a quantidade de reviews com um score maior ou igual a 4. 
+
+select
+    count (review_id) 
+from tb_order_reviews
+WHERE review_score >=4
+
+
+#utilizando a tabela tb_products, conte a quantidade de produtos do nicho de construção que tenham um peso maior que 350
+
+select
+    count (product_id)
+from tb_products
+where product_category_name like '%construcao%' and product_weight_g > 350
+
+
