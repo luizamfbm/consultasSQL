@@ -1,0 +1,37 @@
+1. Faça uma query que apresente o tamanho médio, máximo e mínimo da descrição do objeto por categoria
+
+SELECT
+   product_category_name,
+   avg(product_description_lenght) as media,
+   max(product_description_lenght) as max,
+   min(product_description_lenght) as min
+FROM tb_products
+where product_category_name is not null
+group by 1
+
+
+2. Faça uma query que apresente o tamanho médio, máximo e mínimo da descrição do objeto por categoria, considere apenas os que tem a descrição maior que 100
+
+SELECT
+   product_category_name,
+   avg(product_description_lenght) as media,
+   max(product_description_lenght) as max,
+   min(product_description_lenght) as min
+FROM tb_products
+where product_category_name is not null and product_description_lenght>=100
+group by 1
+
+
+3. Faça uma query que apresente o tamanho médio, máximo e mínimo da descrição do objeto por categoria, 
+considere apenas os que tem a descrição maior que 100 e com tamanho médio maior que 500
+
+
+SELECT
+   product_category_name,
+   avg(product_description_lenght) as media,
+   max(product_description_lenght) as max,
+   min(product_description_lenght) as min
+FROM tb_products
+where product_category_name is not null and product_description_lenght>100 
+group by 1
+having media >500
